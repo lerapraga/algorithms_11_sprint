@@ -1,31 +1,32 @@
-# id 86737658
+# id 86829709
 
-from typing import List
-
-
-def closest_zero(arr: List[int]) -> List[int]:
-
-    arr.reverse()
-    zero_index: int = -1
-    for index, value in enumerate(arr):
-        if value == 0:
-            zero_index = index
-        elif zero_index != -1 and (index - zero_index < value or value == -1):
-            arr[index] = index - zero_index
-    return arr
+HOME = '0'
 
 
-def read_input() -> List[int]:
-    _ = input()
-    arr: list = [0 if x == '0' else -1 for x in input().split()]
-    return arr
+def read_input():
+    num = int(input())
+    plots = input().split()
+    return num, plots
 
 
-def main() -> None:
-    array: list = read_input()
-    result: list = closest_zero(closest_zero(array))
-    print(*result)
+def closest_zero(num: int, plots: str):
+    free_plot = (num * -1)-1
+    left_plot = [0] * num
+    min_dist = [0] * num
+    for count, value in enumerate(plots):
+        if value == HOME:
+            free_plot = count
+        else:
+            left_plot[count] = count - free_plot
+    free_plot = float("inf")
+    for count, value in reversed(list(enumerate(plots))):
+        if value == HOME:
+            free_plot = count
+        else:
+            min_dist[count] = min(free_plot - count, left_plot[count])
+    return min_dist
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    num, plots = read_input()
+    print(*closest_zero(num, plots))
